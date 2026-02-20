@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}My Orders - Anupam SweatsShop{% endblock %}
+
+{% block content %}
+<div class="orders-container">
+    <h1>All Orders</h1>
+
+    {% if orders %}
+    <div class="orders-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Order Number</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td><strong>{{ order.order_number }}</strong></td>
+                    <td>{{ order.customer_name }}</td>
+                    <td>{{ order.created_at.strftime('%Y-%m-%d') }}</td>
+                    <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                    <td>
+                        <span class="status-badge status-{{ order.status.lower() }}">
+                            {{ order.status }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="/order/{{ order.id }}" class="btn btn-small btn-secondary">View Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="no-orders">
+        <p>No orders found.</p>
+        <a href="/shop" class="btn btn-primary">Start Shopping</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

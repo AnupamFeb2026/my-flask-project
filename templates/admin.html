@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - Anupam SweatsShop{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <h1>Admin Dashboard</h1>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Orders</h3>
+            <p class="stat-value">{{ total_orders }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Revenue</h3>
+            <p class="stat-value">${{ "%.2f"|format(total_revenue) }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Pending Orders</h3>
+            <p class="stat-value">{{ pending_orders }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Products</h3>
+            <p class="stat-value">{{ products|length }}</p>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <section class="admin-section">
+        <h2>Recent Orders</h2>
+        <div class="orders-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in recent_orders %}
+                    <tr>
+                        <td><strong>{{ order.order_number }}</strong></td>
+                        <td>{{ order.customer_name }}</td>
+                        <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                        <td>
+                            <span class="status-badge status-{{ order.status.lower() }}">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td>{{ order.created_at.strftime('%Y-%m-%d') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="admin-section">
+        <h2>Products</h2>
+        <div class="products-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.category }}</td>
+                        <td>${{ "%.2f"|format(product.price) }}</td>
+                        <td>
+                            <span class="{% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+                                {{ product.stock }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}

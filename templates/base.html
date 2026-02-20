@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Anupam SweatsShop{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">🧥 Anupam SweatsShop</a>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/shop" class="nav-link">Shop</a></li>
+                <li><a href="/orders" class="nav-link">Orders</a></li>
+                <li><a href="/cart" class="nav-link cart-link">
+                    Cart <span class="cart-count">{{ cart_count }}</span>
+                </a></li>
+                <li><a href="/admin" class="nav-link admin-link">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                    <span class="close-alert">&times;</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About Anupam SweatsShop</h4>
+                <p>Your destination for premium comfortable sweatwear. Quality, style, and comfort guaranteed.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/shop">Shop</a></li>
+                    <li><a href="/orders">Orders</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>Email: info@anupamsweatsshop.com</p>
+                <p>Phone: 1-800-SWEATS-1</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Anupam SweatsShop. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

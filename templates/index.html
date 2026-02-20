@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Anupam SweatsShop{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="hero-content">
+        <h1>Welcome to Anupam SweatsShop</h1>
+        <p>Premium Comfort & Style</p>
+        <a href="/shop" class="btn btn-primary btn-lg">Shop Now</a>
+    </div>
+    <div class="hero-image">
+        <div class="hero-placeholder">🧥</div>
+    </div>
+</div>
+
+<section class="features">
+    <div class="feature-card">
+        <div class="feature-icon">🚚</div>
+        <h3>Fast Shipping</h3>
+        <p>Quick and reliable delivery to your doorstep</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">💚</div>
+        <h3>Quality Products</h3>
+        <p>Premium materials and excellent craftsmanship</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h3>Easy Returns</h3>
+        <p>Hassle-free returns within 30 days</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Secure Shopping</h3>
+        <p>Safe and secure payment processing</p>
+    </div>
+</section>
+
+<section class="featured-products">
+    <h2>Featured Products</h2>
+    <div class="products-grid">
+        {% for product in featured_products %}
+        <div class="product-card">
+            <div class="product-image">
+                <div class="product-placeholder">🧥</div>
+            </div>
+            <div class="product-info">
+                <h3>{{ product.name }}</h3>
+                <p class="price">${{ "%.2f"|format(product.price) }}</p>
+                <p class="stock {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+                    {% if product.stock > 0 %}In Stock ({{ product.stock }}){% else %}Out of Stock{% endif %}
+                </p>
+                <a href="/product/{{ product.id }}" class="btn btn-secondary">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="cta-section">
+    <h2>Ready to Stay Comfortable?</h2>
+    <p>Explore our full collection of premium sweatwear</p>
+    <a href="/shop" class="btn btn-primary btn-lg">Browse Collection</a>
+</section>
+{% endblock %}

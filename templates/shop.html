@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Shop - Anupam SweatsShop{% endblock %}
+
+{% block content %}
+<div class="shop-header">
+    <h1>Our Shop</h1>
+    <p>Discover our complete collection of comfortable sweatwear</p>
+</div>
+
+<div class="shop-container">
+    <!-- Sidebar -->
+    <aside class="shop-sidebar">
+        <h3>Filters</h3>
+
+        <div class="filter-group">
+            <h4>Category</h4>
+            <div class="filter-options">
+                <a href="/shop" class="filter-link {% if not current_category %}active{% endif %}">All</a>
+                {% for cat in categories %}
+                    <a href="/shop?category={{ cat[0] }}"
+                       class="filter-link {% if current_category == cat[0] %}active{% endif %}">
+                        {{ cat[0] }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <h4>Sort By</h4>
+            <select class="sort-select" onchange="window.location.href='/shop?sort=' + this.value">
+                <option value="name">Name (A-Z)</option>
+                <option value="price_low">Price (Low to High)</option>
+                <option value="price_high">Price (High to Low)</option>
+                <option value="newest">Newest</option>
+            </select>
+        </div>
+    </aside>
+
+    <!-- Products Grid -->
+    <section class="shop-products">
+        <div class="products-grid">
+            {% if products %}
+                {% for product in products %}
+                <div class="product-card">
+                    <div class="product-image">
+                        <div class="product-placeholder">🧥</div>
+                        {% if product.stock == 0 %}
+                            <div class="out-of-stock-badge">Out of Stock</div>
+                        {% endif %}
+                    </div>
+                    <div class="product-info">
+                        <h3>{{ product.name }}</h3>
+                        <p class="category">{{ product.category }}</p>
+                        <p class="description">{{ product.description[:50] }}...</p>
+                        <p class="price">${{ "%.2f"|format(product.price) }}</p>
+                        <p class="stock {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+                            {% if product.stock > 0 %}
+                                {{ product.stock }} in stock
+                            {% else %}
+                                Out of Stock
+                            {% endif %}
+                        </p>
+                        <a href="/product/{{ product.id }}" class="btn btn-secondary">View Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-products">
+                    <p>No products found in this category.</p>
+                    <a href="/shop" class="btn btn-primary">View All Products</a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}

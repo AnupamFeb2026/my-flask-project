@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - Anupam SweatsShop{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="/">Home</a> / <a href="/shop">Shop</a> / <span>{{ product.name }}</span>
+</div>
+
+<div class="product-detail-container">
+    <div class="product-detail-image">
+        <div class="product-detail-placeholder">🧥</div>
+    </div>
+
+    <div class="product-detail-info">
+        <h1>{{ product.name }}</h1>
+
+        <div class="rating">
+            <span class="stars">★★★★★ ({{ reviews|length }} reviews)</span>
+            <span class="avg-rating">{{ "%.1f"|format(avg_rating) }}/5</span>
+        </div>
+
+        <p class="category">Category: <strong>{{ product.category }}</strong></p>
+
+        <p class="price" style="font-size: 2em; color: #ff6b6b; margin: 1em 0;">
+            ${{ "%.2f"|format(product.price) }}
+        </p>
+
+        <p class="description">{{ product.description }}</p>
+
+        <div class="stock-info">
+            {% if product.stock > 0 %}
+                <p class="in-stock">✓ In Stock ({{ product.stock }} available)</p>
+            {% else %}
+                <p class="out-of-stock">✗ Out of Stock</p>
+            {% endif %}
+        </div>
+
+        {% if product.stock > 0 %}
+        <form method="POST" action="/add-to-cart/{{ product.id }}" class="add-to-cart-form">
+            <div class="form-group">
+                <label for="size">Size:</label>
+                <select name="size" id="size" required>
+                    <option value="">Select Size</option>
+                    <option value="XS">Extra Small</option>
+                    <option value="S">Small</option>
+                    <option value="M" selected>Medium</option>
+                    <option value="L">Large</option>
+                    <option value="XL">Extra Large</option>
+                    <option value="XXL">2XL</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="color">Color:</label>
+                <select name="color" id="color" required>
+                    <option value="">Select Color</option>
+                    <option value="Black" selected>Black</option>
+                    <option value="White">White</option>
+                    <option value="Gray">Gray</option>
+                    <option value="Navy">Navy</option>
+                    <option value="Red">Red</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <div class="quantity-selector">
+                    <button type="button" class="qty-btn" onclick="decreaseQty()">-</button>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ product.stock }}" required>
+                    <button type="button" class="qty-btn" onclick="increaseQty()">+</button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg">Add to Cart</button>
+        </form>
+        {% endif %}
+
+        <div class="product-details">
+            <h3>Product Details</h3>
+            <ul>
+                <li><strong>Category:</strong> {{ product.category }}</li>
+                <li><strong>Availability:</strong> {% if product.stock > 0 %}In Stock{% else %}Out of Stock{% endif %}</li>
+                <li><strong>Stock:</strong> {{ product.stock }} units</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Reviews Section -->
+<section class="reviews-section">
+    <h2>Customer Reviews</h2>
+
+    {% if reviews %}
+        <div class="reviews-list">
+            {% for review in reviews %}
+            <div class="review-item">
+                <div class="review-header">
+                    <strong>{{ review.customer_name }}</strong>
+                    <span class="review-rating">{{ '★' * review.rating }}{{ '☆' * (5 - review.rating) }}</span>
+                </div>
+                <p class="review-comment">{{ review.comment }}</p>
+                <p class="review-date">{{ review.created_at.strftime('%B %d, %Y') }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No reviews yet. Be the first to review this product!</p>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function increaseQty() {
+    const input = document.getElementById('quantity');
+    input.value = parseInt(input.value) + 1;
+}
+
+function decreaseQty() {
+    const input = document.getElementById('quantity');
+    if (parseInt(input.value) > 1) {
+        input.value = parseInt(input.value) - 1;
+    }
+}
+</script>
+{% endblock %}
